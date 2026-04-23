@@ -23,6 +23,7 @@ RUN mkdir -p \
     /app/rag_data/settings \
     /app/rag_data/chapters \
     /app/rag_data/plot \
+    /app/rag_data/synopsis \
     /app/repo \
     /var/log/supervisor
 

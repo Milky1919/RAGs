@@ -121,8 +121,8 @@ def page_file_management():
     with st.expander("➕ ファイルをアップロード・登録", expanded=False):
         category_dir = st.selectbox(
             "保存先カテゴリ",
-            ["settings", "chapters", "plot"],
-            format_func=lambda x: {"settings": "settings（設定資料）", "chapters": "chapters（本編章）", "plot": "plot（プロット）"}[x],
+            ["settings", "chapters", "plot", "synopsis"],
+            format_func=lambda x: {"settings": "settings（設定資料）", "chapters": "chapters（本編章）", "plot": "plot（プロット）", "synopsis": "synopsis（あらすじ）"}[x],
         )
         uploaded = st.file_uploader(
             "ファイルを選択（.md / .txt）",
@@ -151,8 +151,8 @@ def page_file_management():
     st.divider()
 
     # ── カテゴリ別タブ ───────────────────────────────────────────────────────
-    tabs = st.tabs(["📖 chapters", "⚙️ settings", "📋 plot", "🗂️ other"])
-    categories = ["chapter", "settings", "plot", "other"]
+    tabs = st.tabs(["📖 chapters", "⚙️ settings", "📋 plot", "📝 synopsis", "🗂️ other"])
+    categories = ["chapter", "settings", "plot", "synopsis", "other"]
 
     for tab, cat in zip(tabs, categories):
         with tab:
@@ -225,7 +225,7 @@ def page_file_management():
                                 continue
                             deleted = core.delete_chunks(client, fname)
                             # ファイル本体も削除
-                            for subdir in ["settings", "chapters", "plot"]:
+                            for subdir in ["settings", "chapters", "plot", "synopsis"]:
                                 fp = RAG_DATA_DIR / subdir / fname
                                 if fp.exists():
                                     fp.unlink()
@@ -249,7 +249,7 @@ def page_search():
         with col1:
             top_k = st.slider("取得件数", 1, 15, 5)
         with col2:
-            category = st.selectbox("カテゴリ", ["（指定なし）", "chapter", "settings", "plot"])
+            category = st.selectbox("カテゴリ", ["（指定なし）", "chapter", "settings", "plot", "synopsis"])
         with col3:
             source_type = st.selectbox("Source", ["（指定なし）", "ai", "human"])
         with col4:

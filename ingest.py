@@ -170,12 +170,12 @@ def delete_chunks(client: QdrantClient, source_file: str) -> int:
 def detect_category(file_path: Path) -> str:
     """
     rag_data/ 配下のディレクトリ名からカテゴリを自動判定する。
-    settings/ → "settings", chapters/ → "chapter", plot/ → "plot", その他 → "other"
+    settings/ → "settings", chapters/ → "chapter", plot/ → "plot", synopsis/ → "synopsis", その他 → "other"
     """
     parts = file_path.resolve().parts
     for i, part in enumerate(parts):
         if part == "rag_data" and i + 1 < len(parts):
-            mapping = {"settings": "settings", "chapters": "chapter", "plot": "plot"}
+            mapping = {"settings": "settings", "chapters": "chapter", "plot": "plot", "synopsis": "synopsis"}
             return mapping.get(parts[i + 1], "other")
     return "other"
 

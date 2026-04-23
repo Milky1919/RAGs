@@ -57,7 +57,7 @@ def rag_search(
     Args:
         query:       検索クエリ文字列
         top_k:       取得件数（デフォルト5、最大15）
-        category:    カテゴリフィルター（chapter / settings / plot）
+        category:    カテゴリフィルター（chapter / settings / plot / synopsis）
         volume:      巻数フィルター（例: "1", "2"）
         source_type: 生成元フィルター（ai / human）
         status:      ステータスフィルター（checked / unchecked）
@@ -170,7 +170,7 @@ def rag_status() -> str:
         "",
         "【カテゴリ別】",
     ]
-    for cat in ["chapter", "settings", "plot", "other"]:
+    for cat in ["chapter", "settings", "plot", "synopsis", "other"]:
         count = client.count(
             collection_name=core.COLLECTION_NAME,
             count_filter=Filter(must=[FieldCondition(key="category", match=MatchValue(value=cat))]),
