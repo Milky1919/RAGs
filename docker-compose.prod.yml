@@ -1,0 +1,33 @@
+services:
+
+  # ── Qdrant ベクターDB ───────────────────────────────────────────────────
+  qdrant:
+    image: qdrant/qdrant:latest
+    container_name: novel_rag_qdrant
+    restart: unless-stopped
+    ports:
+      - "6335:6333"
+      - "6336:6334"
+    volumes:
+      - ./qdrant_storage:/qdrant/storage
+    environment:
+      - QDRANT__LOG_LEVEL=INFO
+
+  # ── RAG サービス（MCP + Webhook + Web UI を一括管理） ──────────────────
+  rag-service:
+    image: ghcr.io/milky1919/rags:latest
+    container_name: novel_rag_service
+    restart: unless-stopped
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    ports:
+      - "8765:8765"   # MCP サーバー（HTTP/SSE）
+      - "8766:8766"   # Webhook 受信 API
+      - "8767:8767"   # Streamlit Web UI
+    volumes:
+      - ./rag_data:/app/rag_data
+      - ./repo:/app/repo
+    env_file:
+      - .env
+    depends_on:
+      - qdrant
