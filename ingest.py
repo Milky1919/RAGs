@@ -98,6 +98,9 @@ def update_file_status(client: QdrantClient, source_file: str, new_status: str) 
     Web UI からの「確認済み」操作に使用する。
     戻り値: 更新したチャンク数
     """
+    if new_status != "checked":
+        raise ValueError(f"update_file_status は 'checked' への昇格のみ許可されています（要求値: {new_status!r}）")
+
     # 全チャンクの ID を収集
     file_filter = Filter(
         must=[FieldCondition(key="source_file", match=MatchValue(value=source_file))]

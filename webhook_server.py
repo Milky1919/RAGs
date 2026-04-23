@@ -74,8 +74,13 @@ def _git_clone_or_pull() -> tuple[bool, str, list[str]]:
         ["git", "remote", "set-url", "origin", git_url],
         cwd=REPO_DIR, capture_output=True,
     )
+    branch_result = subprocess.run(
+        ["git", "rev-parse", "--abbrev-ref", "HEAD"],
+        cwd=REPO_DIR, capture_output=True, text=True,
+    )
+    branch = branch_result.stdout.strip() or "main"
     pull_result = subprocess.run(
-        ["git", "pull", "origin"],
+        ["git", "pull", "origin", branch],
         cwd=REPO_DIR, capture_output=True, text=True, timeout=120,
     )
     if pull_result.returncode != 0:

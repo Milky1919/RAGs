@@ -61,8 +61,7 @@ def get_embedding(text: str) -> list[float]:
         resp.raise_for_status()
     except requests.exceptions.ConnectionError:
         print(
-            "❌ Ollama に接続できません。"
-            "Ollamaが起動しているか、http://100.119.108.16:11434 に接続できるか確認してください。",
+            f"❌ Ollama に接続できません。Ollamaが起動しているか、{OLLAMA_URL} に接続できるか確認してください。",
             file=sys.stderr,
         )
         raise

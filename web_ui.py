@@ -38,8 +38,9 @@ def _get_client():
     return core.get_qdrant_client()
 
 
+@st.cache_data(ttl=30)
 def _get_stats() -> list[dict]:
-    """ファイル統計を取得する。"""
+    """ファイル統計を取得する（30秒キャッシュ）。"""
     try:
         client = _get_client()
         core.ensure_collection(client)
@@ -144,6 +145,7 @@ def page_file_management():
                 else:
                     st.error(f"❌ {uf.name}: {result['message']}")
             _get_client.clear()
+            _get_stats.clear()
             st.rerun()
 
     st.divider()
@@ -202,6 +204,7 @@ def page_file_management():
                             updated = core.update_file_status(client, fname, "checked")
                             st.success(f"✅ {fname}: {updated} チャンクを確認済みに更新")
                         _get_client.clear()
+                        _get_stats.clear()
                         st.rerun()
                     except RuntimeError as e:
                         st.error(str(e))
@@ -228,6 +231,7 @@ def page_file_management():
                                     fp.unlink()
                             st.success(f"🗑️ {fname}: {deleted} チャンクを削除")
                         _get_client.clear()
+                        _get_stats.clear()
                         st.rerun()
                     except RuntimeError as e:
                         st.error(str(e))
